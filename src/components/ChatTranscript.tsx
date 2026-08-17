@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react'
-import type { ChatMessage } from '../lib/types'
+import { EmojiText } from './EmojiText'
 
 export function ChatTranscript({
   messages,
@@ -34,7 +33,7 @@ export function ChatTranscript({
                 mine ? 'bg-acid text-ink' : 'bg-panel text-white'
               }`}
             >
-              {message.body}
+              <EmojiText text={message.body} />
             </div>
           </div>
         )

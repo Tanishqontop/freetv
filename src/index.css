@@ -51,10 +51,36 @@ body {
   animation-delay: 0.6s;
 }
 
-input,
-textarea,
-button {
-  font: inherit;
+@keyframes emoji-pop {
+  0% {
+    transform: scale(0.35) rotate(-14deg);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.12) rotate(4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.emoji-3d {
+  display: inline-block;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.45));
+  vertical-align: middle;
+}
+
+.emoji-3d-inline {
+  height: 1.45em;
+  width: 1.45em;
+}
+
+.emoji-3d-lg {
+  height: 4.5rem;
+  width: 4.5rem;
+  animation: emoji-pop 0.42s cubic-bezier(0.2, 1.4, 0.32, 1);
 }
 
 ::selection {

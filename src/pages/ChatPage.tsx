@@ -1,6 +1,7 @@
 import { useMemo, useState, type FormEvent, type KeyboardEvent } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { ChatTranscript } from '../components/ChatTranscript'
+import { EmojiPicker } from '../components/EmojiPicker'
 import { ReportModal } from '../components/ReportModal'
 import { SearchingOverlay } from '../components/SearchingOverlay'
 import { SessionChrome } from '../components/SessionChrome'
@@ -113,15 +114,22 @@ export function ChatPage() {
           }
         />
 
-        <form onSubmit={(e) => void onSubmit(e)} className="border-t border-line p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <form
+          onSubmit={(e) => void onSubmit(e)}
+          className="flex items-end gap-2 border-t border-line p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+        >
+          <EmojiPicker
+            disabled={!connected}
+            onPick={(char) => setDraft((prev) => (prev + char).slice(0, 2000))}
+          />
           <textarea
             value={draft}
             onChange={(e) => setDraft(e.target.value.slice(0, 2000))}
             onKeyDown={onKey}
             disabled={!connected}
-            placeholder={connected ? 'Type a message' : 'Waiting to connect…'}
+            placeholder={connected ? 'Type a message or tap a 3D emoji' : 'Waiting to connect…'}
             rows={2}
-            className="w-full resize-none rounded-2xl border border-line bg-panel px-4 py-3 outline-none focus:border-acid disabled:opacity-50"
+            className="min-w-0 flex-1 resize-none rounded-2xl border border-line bg-panel px-4 py-3 outline-none focus:border-acid disabled:opacity-50"
           />
         </form>
       </div>
