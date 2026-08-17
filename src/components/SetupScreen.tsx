@@ -8,8 +8,10 @@ export function SetupScreen() {
         <Logo />
         <h1 className="mt-8 font-display text-4xl font-extrabold">Connect Supabase</h1>
         <p className="mt-3 text-mute">
-          The app is built. Add your project URL and anon key to{' '}
-          <code className="text-acid">.env.local</code>, then restart the dev server.
+          FreeTV needs your Supabase URL and publishable key. For local dev put them in{' '}
+          <code className="text-acid">.env.local</code>. On Vercel, add{' '}
+          <code className="text-acid">VITE_SUPABASE_URL</code> and{' '}
+          <code className="text-acid">VITE_SUPABASE_ANON_KEY</code> then redeploy.
         </p>
         <ol className="mt-6 list-decimal space-y-2 pl-5 text-sm text-mute">
           <li>Create a project at supabase.com</li>
@@ -19,7 +21,8 @@ export function SetupScreen() {
             the SQL editor
           </li>
           <li>
-            Copy URL + anon key into <code className="text-acid">.env.local</code>
+            Copy URL + anon key into <code className="text-acid">.env.local</code> or Vercel env
+            vars
           </li>
         </ol>
       </div>

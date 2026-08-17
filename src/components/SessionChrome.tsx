@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react'
+import { OnlineBadge } from './OnlineBadge'
+import { useOnlineCount } from '../hooks/useOnlineCount'
 
 export function SessionChrome({
   title,
@@ -13,6 +15,8 @@ export function SessionChrome({
   onReport: () => void
   children?: ReactNode
 }) {
+  const online = useOnlineCount()
+
   return (
     <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
       <div>
@@ -20,6 +24,7 @@ export function SessionChrome({
           FREE<span className="text-acid">TV</span>
         </p>
         <p className="text-xs text-mute">{title}</p>
+        <OnlineBadge count={online} size="sm" />
       </div>
       <div className="flex items-center gap-2">
         {children}

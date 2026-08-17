@@ -1,7 +1,7 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-const url = import.meta.env.VITE_SUPABASE_URL
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const url = import.meta.env.VITE_SUPABASE_URL || 'https://pmngxvtasztofwdpxxdp.supabase.co'
+const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_8fZvrYR_Wpo_mdk024MpEg_qCbYejnT'
 
 export const isSupabaseConfigured = Boolean(url && anonKey && !url.includes('YOUR_PROJECT'))
 

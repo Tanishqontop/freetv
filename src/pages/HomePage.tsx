@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { InterestChips } from '../components/InterestChips'
 import { Logo } from '../components/Logo'
+import { OnlineBadge } from '../components/OnlineBadge'
 import { useAuth } from '../hooks/useAuth'
 import { useOnlineCount } from '../hooks/useOnlineCount'
 import type { Interest } from '../lib/constants'
@@ -37,14 +38,15 @@ export function HomePage() {
       <div className="relative mx-auto flex min-h-dvh max-w-3xl flex-col px-5 py-8">
         <header className="flex items-center justify-between">
           <Logo size="sm" />
-          <p className="text-sm text-mute">
-            {online === null ? 'Connecting…' : `${online.toLocaleString()} online`}
-          </p>
+          <OnlineBadge count={online} size="sm" />
         </header>
 
         <main className="flex flex-1 flex-col items-center justify-center text-center">
           <p className="text-xs uppercase tracking-[0.35em] text-acid">Random strangers · no signup</p>
           <Logo size="lg" />
+          <div className="mt-5">
+            <OnlineBadge count={online} size="lg" />
+          </div>
           <p className="mt-4 max-w-md text-lg text-mute">
             Talk to a random stranger. Free. Text or video. Skip anyone, anytime.
           </p>
