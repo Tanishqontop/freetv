@@ -32,11 +32,3 @@ export const ICE_SERVERS: RTCIceServer[] = [
     ],
   },
 ]
-
-if (import.meta.env.VITE_TURN_URL) {
-  ICE_SERVERS.push({
-    urls: import.meta.env.VITE_TURN_URL,
-    username: import.meta.env.VITE_TURN_USERNAME,
-    credential: import.meta.env.VITE_TURN_CREDENTIAL,
-  })
-}
