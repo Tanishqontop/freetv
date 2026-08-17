@@ -24,7 +24,13 @@ export const REPORT_REASONS = [
 export type ReportReason = (typeof REPORT_REASONS)[number]['id']
 
 export const ICE_SERVERS: RTCIceServer[] = [
-  { urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] },
+  {
+    urls: [
+      'stun:stun.l.google.com:19302',
+      'stun:stun1.l.google.com:19302',
+      'stun:stun.cloudflare.com:3478',
+    ],
+  },
 ]
 
 if (import.meta.env.VITE_TURN_URL) {

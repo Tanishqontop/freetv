@@ -276,6 +276,11 @@ begin
 
   update public.match_queue
     set status = 'cancelled'
+    where status = 'waiting'
+      and created_at < now() - interval '45 seconds';
+
+  update public.match_queue
+    set status = 'cancelled'
     where user_id = v_uid
       and status = 'waiting';
 
@@ -286,6 +291,7 @@ begin
     and q.mode = p_mode
     and q.user_id <> v_uid
     and p.is_banned = false
+    and q.created_at > now() - interval '45 seconds'
   order by
     case
       when cardinality(v_interests) > 0 and q.interests && v_interests then 0

@@ -60,9 +60,12 @@ export function VideoPage() {
   }, [])
 
   useEffect(() => {
-    if (localVideoRef.current && localStream) {
-      localVideoRef.current.srcObject = localStream
-    }
+    const el = localVideoRef.current
+    if (!el || !localStream) return
+    el.srcObject = localStream
+    void el.play().catch(() => {
+      /* autoplay can wait for a tap */
+    })
   }, [localStream])
 
   const ready = Boolean(userId && profile?.age_confirmed_at && !profile.is_banned && localStream)
@@ -151,6 +154,16 @@ export function VideoPage() {
           playsInline
           className="absolute bottom-4 right-4 z-10 h-36 w-28 rounded-xl border border-white/20 object-cover shadow-xl sm:h-44 sm:w-32"
         />
+
+        {webrtc.needsTap && (
+          <button
+            type="button"
+            onClick={webrtc.startPlayback}
+            className="absolute inset-0 z-20 grid place-items-center bg-black/55"
+          >
+            <span className="rounded-2xl bg-acid px-5 py-3 font-semibold text-ink">Tap to show video</span>
+          </button>
+        )}
 
         {match.state === 'connected' && webrtc.connection !== 'connected' && (
           <p className="absolute left-4 top-4 z-10 rounded-full bg-black/50 px-3 py-1 text-sm text-white">
