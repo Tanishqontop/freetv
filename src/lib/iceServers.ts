@@ -34,9 +34,20 @@ async function openRelayServers(): Promise<RTCIceServer[]> {
         'turn:staticauth.openrelay.metered.ca:443?transport=tcp',
         'turns:staticauth.openrelay.metered.ca:443',
         'turns:staticauth.openrelay.metered.ca:443?transport=tcp',
+        'turn:openrelay.metered.ca:80',
+        'turn:openrelay.metered.ca:443',
+        'turn:openrelay.metered.ca:443?transport=tcp',
       ],
       username,
       credential,
+    },
+    {
+      urls: [
+        'turn:openrelay.metered.ca:80',
+        'turn:openrelay.metered.ca:443?transport=tcp',
+      ],
+      username: 'openrelayproject',
+      credential: 'openrelayproject',
     },
   ]
 }

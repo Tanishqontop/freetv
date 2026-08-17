@@ -82,6 +82,7 @@ export function VideoPage() {
     role: match.role,
     enabled: match.state === 'connected',
     localStream,
+    userId,
   })
 
   if (loading) {
