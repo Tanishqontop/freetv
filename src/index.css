@@ -77,10 +77,27 @@ body {
   width: 1.45em;
 }
 
-.emoji-3d-lg {
-  height: 4.5rem;
-  width: 4.5rem;
-  animation: emoji-pop 0.42s cubic-bezier(0.2, 1.4, 0.32, 1);
+@keyframes emoji-float {
+  0% {
+    transform: translateY(0) scale(0.55);
+    opacity: 0;
+  }
+  14% {
+    opacity: 1;
+    transform: translateY(-12%) scale(1);
+  }
+  100% {
+    transform: translateY(-78vh) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.emoji-float {
+  position: absolute;
+  bottom: 4.5rem;
+  height: 4.25rem;
+  width: 4.25rem;
+  animation: emoji-float 2.5s ease-out forwards;
 }
 
 ::selection {

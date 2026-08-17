@@ -52,6 +52,10 @@ export const EMOJIS_3D: Emoji3D[] = [
 
 const byChar = new Map(EMOJIS_3D.map((e) => [e.char, e]))
 
+export function emojiByChar(char: string) {
+  return byChar.get(char)
+}
+
 export function emojiGif(code: string) {
   return GIF(code)
 }

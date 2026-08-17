@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { EmojiBursts } from '../components/EmojiBursts'
+import { EmojiPicker } from '../components/EmojiPicker'
 import { ReportModal } from '../components/ReportModal'
 import { SearchingOverlay } from '../components/SearchingOverlay'
 import { SessionChrome } from '../components/SessionChrome'
 import { useAuth } from '../hooks/useAuth'
+import { useEmojiReactions } from '../hooks/useEmojiReactions'
 import { useMatch } from '../hooks/useMatch'
 import { useReport } from '../hooks/useReport'
 import { useWebRTC } from '../hooks/useWebRTC'
@@ -85,6 +88,12 @@ export function VideoPage() {
     userId,
   })
 
+  const reactions = useEmojiReactions(
+    match.state === 'connected' ? match.session?.id ?? null : null,
+    userId,
+    match.state === 'connected',
+  )
+
   if (loading) {
     return <div className="grid min-h-dvh place-items-center text-mute">Loading…</div>
   }
@@ -134,6 +143,12 @@ export function VideoPage() {
         >
           {webrtc.cameraOff ? 'Camera on' : 'Camera off'}
         </button>
+        <EmojiPicker
+          disabled={match.state !== 'connected'}
+          size="sm"
+          placement="down"
+          onPick={reactions.send}
+        />
       </SessionChrome>
 
       <div
@@ -155,6 +170,8 @@ export function VideoPage() {
           playsInline
           className="absolute bottom-4 right-4 z-10 h-36 w-28 rounded-xl border border-white/20 object-cover shadow-xl sm:h-44 sm:w-32"
         />
+
+        <EmojiBursts bursts={reactions.bursts} />
 
         {webrtc.needsTap && (
           <button
