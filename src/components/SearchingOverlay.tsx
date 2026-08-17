@@ -23,8 +23,11 @@ export function SearchingOverlay({
         <span className="pulse-ring pulse-ring-delay absolute h-40 w-40 rounded-full border border-acid/25" />
         <div className="relative text-center">
           <p className="font-display text-2xl font-bold">{label}</p>
-          <p className="mt-2 text-sm text-mute">
+          <p className="mt-2 max-w-xs text-sm text-mute">
             {seconds > 0 ? `Waiting ${seconds}s` : 'Looking for a stranger'}
+          </p>
+          <p className="mt-3 max-w-xs text-xs text-mute">
+            The other person must also tap Video. People only on the home page will not match.
           </p>
         </div>
       </div>

@@ -68,13 +68,13 @@ export function VideoPage() {
     })
   }, [localStream])
 
-  const ready = Boolean(userId && profile?.age_confirmed_at && !profile.is_banned && localStream)
+  const canMatch = Boolean(userId && profile?.age_confirmed_at && !profile.is_banned)
 
   const match = useMatch({
     mode: 'video',
     interests,
     userId,
-    enabled: ready,
+    enabled: canMatch,
   })
 
   const webrtc = useWebRTC({

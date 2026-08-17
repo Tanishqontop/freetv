@@ -19,9 +19,12 @@ export function useMatch({ mode, interests, userId, enabled }: Options) {
   const sessionIdRef = useRef<string | null>(null)
   const generationRef = useRef(0)
   const leaveTimerRef = useRef<number | undefined>(undefined)
+  const aliveRef = useRef(0)
+  const searchingRef = useRef(false)
 
   const applySession = useCallback((row: ChatSession, id: string) => {
     sessionIdRef.current = row.id
+    searchingRef.current = false
     setSession(row)
     setRole(row.user_a === id ? 'caller' : 'callee')
     setState(row.status === 'active' ? 'connected' : 'disconnected')
@@ -83,8 +86,9 @@ export function useMatch({ mode, interests, userId, enabled }: Options) {
     setSession(null)
     setRole(null)
     sessionIdRef.current = null
+    searchingRef.current = true
     setState('searching')
-    setStartedAt(Date.now())
+    setStartedAt((prev) => prev ?? Date.now())
 
     const client = requireSupabase()
     const { data, error: rpcError } = await client.rpc('match_user', {
@@ -118,13 +122,15 @@ export function useMatch({ mode, interests, userId, enabled }: Options) {
     }
 
     if (result.status === 'matched') {
+      searchingRef.current = false
       await fetchSession(result.sessionId, userId)
     } else {
+      searchingRef.current = true
       window.setTimeout(() => {
         if (generationRef.current === gen && !sessionIdRef.current) {
           void claimMatch(userId)
         }
-      }, 800)
+      }, 400)
     }
   }, [claimMatch, fetchSession, interests, mode, userId])
 
@@ -153,6 +159,7 @@ export function useMatch({ mode, interests, userId, enabled }: Options) {
 
   useEffect(() => {
     if (!enabled || !userId) return
+    const token = ++aliveRef.current
     window.clearTimeout(leaveTimerRef.current)
     void startSearch()
 
@@ -172,13 +179,14 @@ export function useMatch({ mode, interests, userId, enabled }: Options) {
       generationRef.current += 1
       const id = sessionIdRef.current
       leaveTimerRef.current = window.setTimeout(() => {
+        if (aliveRef.current !== token) return
         const client = requireSupabase()
         if (id) {
           void client.rpc('end_session', { p_session_id: id, p_reason: 'disconnect' })
         } else {
           void client.rpc('leave_queue')
         }
-      }, 500)
+      }, 1500)
     }
   }, [enabled, startSearch, userId])
 
@@ -209,6 +217,7 @@ export function useMatch({ mode, interests, userId, enabled }: Options) {
         (payload) => {
           const row = payload.new as ChatSession
           if (row.user_a === userId || row.user_b === userId) {
+            searchingRef.current = false
             applySession(row, userId)
           }
         },
@@ -217,13 +226,18 @@ export function useMatch({ mode, interests, userId, enabled }: Options) {
 
     const poll = window.setInterval(() => {
       if (!sessionIdRef.current) void claimMatch(userId)
-    }, 1500)
+    }, 800)
+
+    const rematch = window.setInterval(() => {
+      if (!sessionIdRef.current && searchingRef.current) void startSearch()
+    }, 8000 + Math.floor(Math.random() * 4000))
 
     return () => {
       window.clearInterval(poll)
+      window.clearInterval(rematch)
       void client.removeChannel(queueChannel)
     }
-  }, [applySession, claimMatch, enabled, fetchSession, userId])
+  }, [applySession, claimMatch, enabled, fetchSession, startSearch, userId])
 
   useEffect(() => {
     if (!session?.id || !userId) return
