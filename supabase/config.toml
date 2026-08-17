@@ -1,0 +1,2 @@
+# A unique project ID. Change this after linking with `supabase link`.
+project_id = "freetv"
